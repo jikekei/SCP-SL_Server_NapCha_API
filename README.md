@@ -1,4 +1,5 @@
 # SCP-SL_Server_NapCha_API
+SCPSL 
 一个简单的基于HintServiceMeow的提示服务API和基于Exiled的API（应该说是方法合集）,
 可以简单的实现一些功能例如提示hint，设置血量，简单的特殊角色不重叠等。
 
