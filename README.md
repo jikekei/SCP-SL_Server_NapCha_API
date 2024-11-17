@@ -12,3 +12,7 @@
     Server_NapCha_API server_NapCha_API = new Server_NapCha_API();
     
 实例化然后就可以调用里面的方法了
+
+
+可能写的不是很好请见谅
+联系：如果有问题可以与我联系 [邮箱](liseximt@outlook.com) QQ: 3037240065
