@@ -1,0 +1,2 @@
+# SCP-SL_Server_NapCha_API
+一个简单的基于HintServiceMeow的提示服务API和基于Exiled的API
