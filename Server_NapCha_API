@@ -24,7 +24,6 @@ namespace Server_NapCha_ui_API
             return hint;
         }
 
-        //疑名制造的宇宙无敌，超级牛逼666的API
 
         public void 提示服务0(Player 玩家, int 大小 = 25, int 时间 = 5, int 高度 = 100, string 内容 = "Server_NapCha_ui_API_FileName_null_text", HintAlignment 位置 = HintAlignment.Left)
         {
@@ -62,12 +61,12 @@ namespace Server_NapCha_ui_API
         {
             PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
             HintServiceMeow.Core.Models.Hints.AbstractHint hint = playerDisplay.GetHint("your_hint_id");
-            Timer lastCancelTimer = null; // 初始化为 null
+            Timer lastCancelTimer = null; 
             if (lastCancelTimer0.ContainsKey(player))
             {
                 lastCancelTimer = lastCancelTimer0[player];
             }
-            // 如果上一个提示已存在，先取消其定时器
+  
             if (lastCancelTimer != null)
             {
                 lastCancelTimer.Dispose();
@@ -90,8 +89,8 @@ namespace Server_NapCha_ui_API
 
             lastCancelTimer = new Timer((state) =>
             {
-                playerDisplay.RemoveHint(hint); // 使用实际的Guid替换yourGuid
-            }, null, 时间 * 1000, Timeout.Infinite); // 转换为毫秒
+                playerDisplay.RemoveHint(hint); 
+            }, null, 时间 * 1000, Timeout.Infinite); 
 
             if (!lastCancelTimer0.ContainsKey(player))
             {
@@ -113,12 +112,12 @@ namespace Server_NapCha_ui_API
         {
             PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
             HintServiceMeow.Core.Models.Hints.AbstractHint hint = playerDisplay.GetHint("your_hint_id");
-            Timer lastCancelTimer = null; // 初始化为 null
+            Timer lastCancelTimer = null; 
             if (lastCancelTimer1.ContainsKey(player))
             {
                 lastCancelTimer = lastCancelTimer0[player];
             }
-            // 如果上一个提示已存在，先取消其定时器
+  
             if (lastCancelTimer != null)
             {
                 lastCancelTimer.Dispose();
@@ -141,8 +140,8 @@ namespace Server_NapCha_ui_API
 
             lastCancelTimer = new Timer((state) =>
             {
-                playerDisplay.RemoveHint(hint); // 使用实际的Guid替换yourGuid
-            }, null, 时间 * 1000, Timeout.Infinite); // 转换为毫秒
+                playerDisplay.RemoveHint(hint); 
+            }, null, 时间 * 1000, Timeout.Infinite);
 
             if (!lastCancelTimer1.ContainsKey(player))
             {
@@ -152,8 +151,6 @@ namespace Server_NapCha_ui_API
             return hint;
         }
 
-
-        //疑名制造的宇宙无敌，超级牛逼666的API
 
         public HintServiceMeow.Core.Models.Hints.Hint 更新提示(Player 玩家, HintServiceMeow.Core.Models.Hints.Hint existingHint = null, string newText = "Server_NapCha_ui_API_FileName_null_text")
         {
@@ -166,7 +163,7 @@ namespace Server_NapCha_ui_API
             }
             else
             {
-                // 如果没有找到现有提示，可以选择抛出异常或记录日志
+                
                 Log.Error("Server_NapCha_ui_API_FileName 提示不存在，无法更新");
                 return null;
             }
@@ -217,7 +214,7 @@ namespace Server_NapCha_ui_API
             }
 
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
+    
 
         public void 清空阵营(Player 玩家)
         {
@@ -241,14 +238,14 @@ namespace Server_NapCha_ui_API
             {
                 无伤害.Remove(玩家);
             }
-        }        //疑名制造的宇宙无敌，超级牛逼666的API
+        }    
 
 
         public System.TimeSpan 获取回合时间()
         {
             return Round.ElapsedTime;
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
+      
 
         public void 设置血量(Player ev = null, int 血量 = 100)
         {
@@ -265,7 +262,7 @@ namespace Server_NapCha_ui_API
         {
             return Player.List.Count;
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
+  
 
         public int 获取观察者人数()
         {
@@ -279,8 +276,7 @@ namespace Server_NapCha_ui_API
             }
             return s1;
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
-
+     
         public void 添加特殊角色列表(Player ev)
         {
             if (特殊角色列表.Contains(ev))
@@ -289,7 +285,7 @@ namespace Server_NapCha_ui_API
             }
             特殊角色列表.Add(ev);
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
+       
 
         public void 移除特殊角色列表(Player ev)
         {
@@ -298,7 +294,7 @@ namespace Server_NapCha_ui_API
                 特殊角色列表.Remove(ev);
             }
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
+   
 
         public bool 检查角色是否在特殊角色列表中(Player ev)
         {
@@ -314,13 +310,13 @@ namespace Server_NapCha_ui_API
 
         public float SCPs173()
         {
-            float s173 = 0; // 或者根据需要给定合适的初始值
+            float s173 = 0; 
             foreach (Player player in Player.List)
             {
                 if (player.Role.Type == PlayerRoles.RoleTypeId.Scp173)
                 {
                     s173 = player.Health;
-                    return s173; // 直接返回Scp173的血量
+                    return s173; 
                 }
             }
             return 0;
