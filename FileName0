@@ -1,0 +1,32 @@
+namespace Server_NapCha_ui_API
+{
+    public class FileName0
+    {
+        public void 伤害处理程序(HurtingEventArgs hut) // 伤害处理程序
+        {
+            if(hut.Attacker == null || hut.Player == null)
+            {
+                return;
+            }
+            if (Server_NapCha_API.SCPs.Contains(hut.Player) && hut.Attacker.Role.Team == Team.SCPs || Server_NapCha_API.SCPs.Contains(hut.Attacker) && hut.Player.Role.Team == Team.SCPs || Server_NapCha_API.SCPs.Contains(hut.Attacker)&& Server_NapCha_API.SCPs.Contains(hut.Player))
+            {
+                hut.IsAllowed = false;
+            }
+            if (Server_NapCha_API.ntf.Contains(hut.Player) && hut.Attacker.Role.Team == Team.FoundationForces || Server_NapCha_API.ntf.Contains(hut.Attacker) && hut.Player.Role.Team == Team.FoundationForces || Server_NapCha_API.ntf.Contains(hut.Attacker) && Server_NapCha_API.ntf.Contains(hut.Player))
+            {
+                hut.IsAllowed = false;
+            }
+            if (Server_NapCha_API.cs.Contains(hut.Player) && hut.Attacker.Role.Team == Team.ChaosInsurgency || Server_NapCha_API.cs.Contains(hut.Attacker) && hut.Player.Role.Team == Team.ChaosInsurgency || Server_NapCha_API.cs.Contains(hut.Attacker) && Server_NapCha_API.cs.Contains(hut.Player))
+            {
+                hut.IsAllowed = false;
+            }
+            if(Server_NapCha_API.zl.Contains(hut.Player) && hut.Attacker != null || Server_NapCha_API.zl.Contains(hut.Attacker))
+            {
+                hut.IsAllowed = false;
+            }
+            if(Server_NapCha_API.无伤害.Contains(hut.Attacker))
+            {
+                hut.IsAllowed = true;
+            }
+        }
+    }
