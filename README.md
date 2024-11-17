@@ -8,5 +8,7 @@
 
 使用方法将本插件作为引用
 使用
+
     Server_NapCha_API server_NapCha_API = new Server_NapCha_API();
+    
 实例化然后就可以调用里面的方法了
