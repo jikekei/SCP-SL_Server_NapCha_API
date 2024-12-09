@@ -3,6 +3,8 @@ SCPSL
 一个简单的基于HintServiceMeow的提示服务API和基于Exiled的API（应该说是方法合集）,
 可以简单的实现一些功能例如提示hint，设置血量，简单的特殊角色不重叠等。
 
+其中hint的动态提示方法可以做到，直接调用方法即可更新内容以及取消时间。简单便捷的使用hint
+
 安装本插件需要[HintServiceMeow](https://github.com/MeowServer/HintServiceMeow) 作为引用，
 
 安装到插件文件夹C:\Users\Administrator\AppData\Roaming\EXILED\Plugins文件夹下
