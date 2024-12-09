@@ -1,175 +1,123 @@
-namespace Server_NapCha_ui_API
-{
+using Exiled.API.Features;
+using HintServiceMeow.Core.Enum;
+using HintServiceMeow.Core.Models.Hints;
+using HintServiceMeow.Core.Utilities;
+using MEC;
+using System;
+using System.Collections.Generic;
+using static HintServiceMeow.Core.Utilities.PlayerDisplay;
+using System.Threading;
+using System.Linq;
 
+namespace Server_NapCha_API
+{
     public class Server_NapCha_API
     {
-        //一个简单的基于HintServiceMeow的提示服务API和基于Exiled的API
+        // 各阵营的玩家列表
+        public static List<Player> SCPs = new List<Player>();
+        public static List<Player> ntf = new List<Player>();
+        public static List<Player> cs = new List<Player>();
+        public static List<Player> zl = new List<Player>();
+        public static List<Player> 无伤害 = new List<Player>();
+        public static List<Player> 特殊角色列表 = new List<Player>();
 
+        /// <summary>
+        /// 显示一个固定的提示
+        /// 使用示例：
+        /// var hint = 提示服务_固定提示hint(player, "你的提示内容");
+        /// </summary>
+        public HintServiceMeow.Core.Models.Hints.Hint 提示服务_固定提示hint(Player 玩家, string 内容)
+        {
+            var hint = CreateHint(内容, 0, 25, 950, HintAlignment.Center, "gdtshint");
+            PlayerDisplay.Get(玩家).AddHint(hint); // 添加提示到玩家显示
+            return hint;
+        }
+
+        /// <summary>
+        /// 显示一个自定义提示
+        /// 使用示例：
+        /// var hint = 提示服务(player, 30, 200, "提示内容", HintAlignment.Center);
+        /// </summary>
         public HintServiceMeow.Core.Models.Hints.Hint 提示服务(Player 玩家, int 大小 = 25, int 高度 = 100, string 内容 = "Server_NapCha_ui_API_FileName_null_text", HintAlignment 位置 = HintAlignment.Left)
         {
             if (玩家 == null)
             {
-                //throw new ArgumentNullException(nameof(玩家));
                 Log.Error("Server_NapCha_ui_API_FileName 提示服务 玩家为空");
                 return null;
             }
-            HintServiceMeow.Core.Models.Hints.Hint hint = new HintServiceMeow.Core.Models.Hints.Hint();
-            hint.Text = 内容;
-            hint.FontSize = 大小;
-            hint.YCoordinate = 高度;
-            hint.Alignment = 位置;
-            PlayerDisplay playerDisplay = PlayerDisplay.Get(玩家);
-            playerDisplay.AddHint(hint);
 
+            var hint = CreateHint(内容, 0, 大小, 高度, 位置);
+            PlayerDisplay.Get(玩家).AddHint(hint); // 添加提示到玩家显示
             return hint;
         }
 
-
+        /// <summary>
+        /// 显示一个定时提示，指定时间后移除
+        /// 使用示例：
+        /// 提示服务0(player, 25, 5, 100, "定时提示内容", HintAlignment.Left);
+        /// </summary>
         public void 提示服务0(Player 玩家, int 大小 = 25, int 时间 = 5, int 高度 = 100, string 内容 = "Server_NapCha_ui_API_FileName_null_text", HintAlignment 位置 = HintAlignment.Left)
         {
             if (玩家 == null)
             {
-                //throw new ArgumentNullException(nameof(玩家));
                 Log.Error("Server_NapCha_ui_API_FileName 提示服务 玩家为空");
+                return;
             }
-            HintServiceMeow.Core.Models.Hints.Hint hint = new HintServiceMeow.Core.Models.Hints.Hint();
-            hint.Text = 内容;
-            hint.FontSize = 大小;
-            hint.YCoordinate = 高度;
-            hint.Alignment = 位置;
-            PlayerDisplay playerDisplay = PlayerDisplay.Get(玩家);
-            playerDisplay.AddHint(hint);
 
-            Timing.CallDelayed(时间, () => // Execute the provided method 5 seconds late.
-            {
-                playerDisplay.RemoveHint(hint);
-            });
+            var hint = CreateHint(内容, 0, 大小, 高度, 位置);
+            PlayerDisplay.Get(玩家).AddHint(hint); // 添加提示到玩家显示
+
+            // 设置延迟移除提示
+            Timing.CallDelayed(时间, () => PlayerDisplay.Get(玩家).RemoveHint(hint));
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
 
+        // 存储每个玩家的定时器
         public static Dictionary<Player, Timer> lastCancelTimer0 = new Dictionary<Player, Timer>();
 
-        //yiming_hint_api
-        // 提示位置：中上方
-        // 提示字体大小：25
-
-        //使用方法：提示服务1（方法，传入player，提示内容，提示时间（单位：秒）
-
-        // 返回值：返回一个AbstractHint对象，可以通过这个对象来更新提示内容、设置提示位置、设置提示字体大小等。
-
+        /// <summary>
+        /// 显示动态更新的提示
+        /// 使用示例：
+        /// var hint = 提示服务1(player, "新提示内容", 8);
+        /// </summary>
         public HintServiceMeow.Core.Models.Hints.AbstractHint 提示服务1(Player player, string text, int 时间 = 5)
         {
-            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
-            HintServiceMeow.Core.Models.Hints.AbstractHint hint = playerDisplay.GetHint("your_hint_id");
-            Timer lastCancelTimer = null; 
-            if (lastCancelTimer0.ContainsKey(player))
-            {
-                lastCancelTimer = lastCancelTimer0[player];
-            }
-  
-            if (lastCancelTimer != null)
-            {
-                lastCancelTimer.Dispose();
-            }
-            if (hint != null)
-            {
-                hint.Text = text;
-            }
-            else
-            {
-                HintServiceMeow.Core.Models.Hints.Hint hint0 = new HintServiceMeow.Core.Models.Hints.Hint();
-                hint0.Text = text;
-                hint0.XCoordinate = 0;
-                hint0.FontSize = 25;
-                hint0.YCoordinate = 249;
-                hint0.Id = "your_hint_id";
-                hint0.Alignment = HintAlignment.Center;
-                playerDisplay.AddHint(hint0);
-            }
-
-            lastCancelTimer = new Timer((state) =>
-            {
-                playerDisplay.RemoveHint(hint); 
-            }, null, 时间 * 1000, Timeout.Infinite); 
-
-            if (!lastCancelTimer0.ContainsKey(player))
-            {
-                lastCancelTimer0.Add(player, lastCancelTimer);
-            }
-
-            return hint;
+            return HandleDynamicHint(player, text, 时间, lastCancelTimer0);
         }
 
-        //yiming_hint_api
-        // 提示位置：中下方
-        // 提示字体大小：25
-
-        //使用方法：提示服务2（方法，传入player，提示内容，提示时间（单位：秒）
-
-        // 返回值：返回一个AbstractHint对象，可以通过这个对象来更新提示内容、设置提示位置、设置提示字体大小等。
+        // 存储每个玩家的定时器（第二个提示）
         public static Dictionary<Player, Timer> lastCancelTimer1 = new Dictionary<Player, Timer>();
+
+        /// <summary>
+        /// 显示动态更新的提示（带自定义字体大小）
+        /// 使用示例：
+        /// var hint = 提示服务2(player, "提示内容", 10, 32);
+        /// </summary>
         public HintServiceMeow.Core.Models.Hints.AbstractHint 提示服务2(Player player, string text, int 时间 = 5, int 字体大小 = 32)
         {
-            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
-            HintServiceMeow.Core.Models.Hints.AbstractHint hint = playerDisplay.GetHint("your_hint_id");
-            Timer lastCancelTimer = null; 
-            if (lastCancelTimer1.ContainsKey(player))
-            {
-                lastCancelTimer = lastCancelTimer0[player];
-            }
-  
-            if (lastCancelTimer != null)
-            {
-                lastCancelTimer.Dispose();
-            }
-            if (hint != null)
-            {
-                hint.Text = text;
-            }
-            else
-            {
-                HintServiceMeow.Core.Models.Hints.Hint hint0 = new HintServiceMeow.Core.Models.Hints.Hint();
-                hint0.Text = text;
-                hint0.XCoordinate = 0;
-                hint0.FontSize = 字体大小;
-                hint0.YCoordinate = 700;
-                hint0.Id = "your_hint_id";
-                hint0.Alignment = HintAlignment.Center;
-                playerDisplay.AddHint(hint0);
-            }
-
-            lastCancelTimer = new Timer((state) =>
-            {
-                playerDisplay.RemoveHint(hint); 
-            }, null, 时间 * 1000, Timeout.Infinite);
-
-            if (!lastCancelTimer1.ContainsKey(player))
-            {
-                lastCancelTimer1.Add(player, lastCancelTimer);
-            }
-
-            return hint;
+            return HandleDynamicHint(player, text, 时间, lastCancelTimer1, 字体大小);
         }
 
-
-        public HintServiceMeow.Core.Models.Hints.Hint 更新提示(Player 玩家, HintServiceMeow.Core.Models.Hints.Hint existingHint = null, string newText = "Server_NapCha_ui_API_FileName_null_text")
+        /// <summary>
+        /// 更新存在的提示
+        /// 使用示例：
+        /// 更新提示(player, existingHint, "更新后的提示内容");
+        /// </summary>
+        public HintServiceMeow.Core.Models.Hints.Hint 更新提示(Player 玩家, HintServiceMeow.Core.Models.Hints.Hint existingHint, string newText = "Server_NapCha_ui_API_FileName_null_text")
         {
             if (existingHint != null)
             {
-                // 更新提示文本
-                existingHint.Text = newText;
-                var s1 = existingHint;
-                return s1;
+                existingHint.Text = newText; // 更新提示文本
+                return existingHint;
             }
-            else
-            {
-                
-                Log.Error("Server_NapCha_ui_API_FileName 提示不存在，无法更新");
-                return null;
-            }
+            Log.Error("Server_NapCha_ui_API_FileName 提示不存在，无法更新");
+            return null;
         }
-        //疑名制造的宇宙无敌，超级牛逼666的API
 
+        /// <summary>
+        /// 设置玩家的阵营
+        /// 使用示例：
+        /// 设置阵营(player, PlayerRoles.Team.SCPs);
+        /// </summary>
         public void 设置阵营(Player 玩家, PlayerRoles.Team 阵营 = PlayerRoles.Team.Dead)
         {
             if (玩家 == null)
@@ -177,77 +125,41 @@ namespace Server_NapCha_ui_API
                 Log.Error("Server_NapCha_ui_API_FileName 设置阵营 玩家为空");
                 return;
             }
-            if (阵营 == PlayerRoles.Team.SCPs)
-            {
-                if (!SCPs.Contains(玩家))
-                    SCPs.Add(玩家);
-                else
-                    return;
-            }
-            else if (阵营 == PlayerRoles.Team.FoundationForces)
-            {
-                if (!ntf.Contains(玩家))
-                    ntf.Add(玩家);
-                else
-                    return;
-            }
-            else if (阵营 == PlayerRoles.Team.ChaosInsurgency)
-            {
-                if (!cs.Contains(玩家))
-                    cs.Add(玩家);
-                else
-                    return;
-            }
-            else if (阵营 == PlayerRoles.Team.OtherAlive)
-            {
-                if (!zl.Contains(玩家))
-                    zl.Add(玩家);
-                else
-                    return;
-            }
-            else if (阵营 == PlayerRoles.Team.Dead)
-            {
-                if (!无伤害.Contains(玩家))
-                    无伤害.Add(玩家);
-                else
-                    return;
-            }
 
+            // 获取阵营对应的玩家列表
+            var teamList = GetTeamList(阵营);
+            if (teamList != null && !teamList.Contains(玩家))
+                teamList.Add(玩家); // 添加玩家到相应的阵营列表
         }
-    
 
+        /// <summary>
+        /// 清空玩家的阵营信息
+        /// 使用示例：
+        /// 清空阵营(player);
+        /// </summary>
         public void 清空阵营(Player 玩家)
         {
-            if (SCPs.Contains(玩家))
+            // 从所有阵营中移除玩家
+            foreach (var teamList in new List<List<Player>> { SCPs, ntf, cs, zl, 无伤害 })
             {
-                SCPs.Remove(玩家);
+                if (teamList.Contains(玩家))
+                    teamList.Remove(玩家);
             }
-            if (ntf.Contains(玩家))
-            {
-                ntf.Remove(玩家);
-            }
-            if (cs.Contains(玩家))
-            {
-                cs.Remove(玩家);
-            }
-            if (zl.Contains(玩家))
-            {
-                zl.Remove(玩家);
-            }
-            if (无伤害.Contains(玩家))
-            {
-                无伤害.Remove(玩家);
-            }
-        }    
-
-
-        public System.TimeSpan 获取回合时间()
-        {
-            return Round.ElapsedTime;
         }
-      
 
-        public void 设置血量(Player ev = null, int 血量 = 100)
+        /// <summary>
+        /// 获取回合的持续时间
+        /// 使用示例：
+        /// var roundTime = 获取回合时间();
+        /// </summary>
+        public System.TimeSpan 获取回合时间() => Round.ElapsedTime;
+
+        /// <summary>
+        /// 设置玩家的血量
+        /// 使用示例：
+        /// 设置血量(player, 100);
+        /// </summary>
+        public void 设置血量(Player ev, int 血量 = 100)
         {
             if (ev == null)
             {
@@ -255,111 +167,152 @@ namespace Server_NapCha_ui_API
                 return;
             }
 
-            Timing.CallDelayed(0.5f, () => ev.MaxHealth = 血量);
-            Timing.CallDelayed(0.5f, () => ev.Health = 血量);
-        }
-        public int 获取回合人数()
-        {
-            return Player.List.Count;
-        }
-  
-
-        public int 获取观察者人数()
-        {
-            int s1 = 0;
-            foreach (Player player in Player.List)
+            // 延迟设置玩家的最大和当前血量
+            Timing.CallDelayed(0.5f, () =>
             {
-                if (player.Role.Type == PlayerRoles.RoleTypeId.Spectator)
-                {
-                    s1++;
-                }
-            }
-            return s1;
+                ev.MaxHealth = 血量;
+                ev.Health = 血量;
+            });
         }
-     
+
+        /// <summary>
+        /// 获取当前回合人数
+        /// 使用示例：
+        /// int playerCount = 获取回合人数();
+        /// </summary>
+        public int 获取回合人数() => Player.List.Count;
+
+        /// <summary>
+        /// 获取当前观察者人数
+        /// 使用示例：
+        /// int observerCount = 获取观察者人数();
+        /// </summary>
+        public int 获取观察者人数() => Player.List.Count(player => player.Role.Type == PlayerRoles.RoleTypeId.Spectator);
+
+        /// <summary>
+        /// 添加特殊角色到列表
+        /// 使用示例：
+        /// 添加特殊角色列表(player);
+        /// </summary>
         public void 添加特殊角色列表(Player ev)
         {
-            if (特殊角色列表.Contains(ev))
-            {
-                return;
-            }
-            特殊角色列表.Add(ev);
+            if (!特殊角色列表.Contains(ev))
+                特殊角色列表.Add(ev);
         }
-       
 
+        /// <summary>
+        /// 从特殊角色列表中移除
+        /// 使用示例：
+        /// 移除特殊角色列表(player);
+        /// </summary>
         public void 移除特殊角色列表(Player ev)
         {
             if (特殊角色列表.Contains(ev))
-            {
                 特殊角色列表.Remove(ev);
-            }
-        }
-   
-
-        public bool 检查角色是否在特殊角色列表中(Player ev)
-        {
-            if (特殊角色列表.Contains(ev))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
+        /// <summary>
+        /// 检查角色是否在特殊角色列表中
+        /// 使用示例：
+        /// bool isSpecial = 检查角色是否在特殊角色列表中(player);
+        /// </summary>
+        public bool 检查角色是否在特殊角色列表中(Player ev) => 特殊角色列表.Contains(ev);
+
+        /// <summary>
+        /// 获取 SCP-173 的生命值
+        /// 使用示例：
+        /// float health = SCPs173();
+        /// </summary>
         public float SCPs173()
         {
-            float s173 = 0; 
             foreach (Player player in Player.List)
             {
                 if (player.Role.Type == PlayerRoles.RoleTypeId.Scp173)
-                {
-                    s173 = player.Health;
-                    return s173; 
-                }
+                    return player.Health; // 返回 SCP-173 的生命值
             }
-            return 0;
+            return 0; // 如果没有找到 SCP-173，返回 0
         }
+
+        /// <summary>
+        /// SCP 身份的恢复方法
+        /// 使用示例：
+        /// SCP恢复满盾(player);
+        /// </summary>
         public void SCP恢复满盾(Player ev)
         {
-            if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp173)
-            {
-
-            }
-            else if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp939)
-            {
-
-            }
-            else if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp049)
-            {
-
-            }
-            else if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp096)
-            {
-
-            }
-            else if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp106)
-            {
-
-            }
-            else if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp3114)
-            {
-
-            }
-            else if (ev.Role.Type == PlayerRoles.RoleTypeId.Scp0492)
-            {
-
-            }
+            // 根据角色类型添加恢复逻辑
         }
 
+        // 辅助方法：创建提示对象
+        private HintServiceMeow.Core.Models.Hints.Hint CreateHint(string text, int xCoordinate, int fontSize, int yCoordinate, HintAlignment alignment, string id = null)
+        {
+            return new HintServiceMeow.Core.Models.Hints.Hint()
+            {
+                Text = text,
+                XCoordinate = xCoordinate,
+                FontSize = fontSize,
+                YCoordinate = yCoordinate,
+                Alignment = alignment,
+                Id = id
+            };
+        }
 
-        public static List<Player> SCPs = new List<Player>();
-        public static List<Player> ntf = new List<Player>();
-        public static List<Player> cs = new List<Player>();
-        public static List<Player> zl = new List<Player>();
-        public static List<Player> 无伤害 = new List<Player>();
-        public static List<Player> 特殊角色列表 = new List<Player>();
+        // 辅助方法：处理动态提示
+        private HintServiceMeow.Core.Models.Hints.AbstractHint HandleDynamicHint(Player player, string text, int time, Dictionary<Player, Timer> timerDictionary, int fontSize = 25)
+        {
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+            var hint = playerDisplay.GetHint("your_hint_id");
+
+            // 取消上一个提示的定时器
+            if (timerDictionary.TryGetValue(player, out var lastCancelTimer))
+            {
+                lastCancelTimer.Dispose();
+            }
+
+            if (hint != null)
+            {
+                hint.Text = text; // 更新提示文本
+            }
+            else
+            {
+                hint = CreateHint(text, 0, fontSize, 249, HintAlignment.Center); // 创建新的提示
+                playerDisplay.AddHint(hint); // 添加到玩家显示
+            }
+
+            // 设置延迟移除提示
+            lastCancelTimer = new Timer((state) =>
+            {
+                playerDisplay.RemoveHint(hint);
+            }, null, time * 1000, Timeout.Infinite);
+
+            // 添加当前玩家的定时器
+            if (!timerDictionary.ContainsKey(player))
+            {
+                timerDictionary.Add(player, lastCancelTimer);
+            }
+
+            return hint; // 返回当前提示对象
+        }
+
+        //辅助方法：获取对应阵营的玩家列表
+        private List<Player> GetTeamList(PlayerRoles.Team team)
+        {
+            switch (team)
+            {
+                case PlayerRoles.Team.SCPs:
+                    return SCPs;
+                case PlayerRoles.Team.FoundationForces:
+                    return ntf;
+                case PlayerRoles.Team.ChaosInsurgency:
+                    return cs;
+                case PlayerRoles.Team.OtherAlive:
+                    return zl;
+                case PlayerRoles.Team.Dead:
+                    return 无伤害;
+                default:
+                    return null;
+            }
+        }
 
     }
 }
