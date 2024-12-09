@@ -1,32 +1,57 @@
+using Exiled.Events.EventArgs.Player;
+using PlayerRoles;
+using System.Collections.Generic;
+
 namespace Server_NapCha_ui_API
 {
+    // 处理伤害事件的类
     public class FileName0
     {
+        // 处理伤害的具体方法
         public void 伤害处理程序(HurtingEventArgs hut) // 伤害处理程序
         {
-            if(hut.Attacker == null || hut.Player == null)
+            if (hut.Attacker == null || hut.Player == null)
             {
                 return;
             }
-            if (Server_NapCha_API.SCPs.Contains(hut.Player) && hut.Attacker.Role.Team == Team.SCPs || Server_NapCha_API.SCPs.Contains(hut.Attacker) && hut.Player.Role.Team == Team.SCPs || Server_NapCha_API.SCPs.Contains(hut.Attacker)&& Server_NapCha_API.SCPs.Contains(hut.Player))
+
+            bool isAttackerSCP = Server_NapCha_API.Server_NapCha_API.SCPs.Contains(hut.Attacker);
+            bool isPlayerSCP = Server_NapCha_API.Server_NapCha_API.SCPs.Contains(hut.Player);
+            bool isAttackerNTF = Server_NapCha_API.Server_NapCha_API.ntf.Contains(hut.Attacker);
+            bool isPlayerNTF = Server_NapCha_API.Server_NapCha_API.ntf.Contains(hut.Player);
+            bool isAttackerCS = Server_NapCha_API.Server_NapCha_API.cs.Contains(hut.Attacker);
+            bool isPlayerCS = Server_NapCha_API.Server_NapCha_API.cs.Contains(hut.Player);
+            bool isAttackerZL = Server_NapCha_API.Server_NapCha_API.zl.Contains(hut.Attacker);
+            bool isPlayerZL = Server_NapCha_API.Server_NapCha_API.zl.Contains(hut.Player);
+            bool isAttackerNoDamage = Server_NapCha_API.Server_NapCha_API.无伤害.Contains(hut.Attacker);
+
+            // 根据不同团队的攻击者和玩家的角色决定是否允许伤害
+            if ((isPlayerSCP && hut.Attacker.Role.Team == Team.SCPs) ||
+                (isAttackerSCP && hut.Player.Role.Team == Team.SCPs) ||
+                (isAttackerSCP && isPlayerSCP))
             {
                 hut.IsAllowed = false;
             }
-            if (Server_NapCha_API.ntf.Contains(hut.Player) && hut.Attacker.Role.Team == Team.FoundationForces || Server_NapCha_API.ntf.Contains(hut.Attacker) && hut.Player.Role.Team == Team.FoundationForces || Server_NapCha_API.ntf.Contains(hut.Attacker) && Server_NapCha_API.ntf.Contains(hut.Player))
+            else if ((isPlayerNTF && hut.Attacker.Role.Team == Team.FoundationForces) ||
+                     (isAttackerNTF && hut.Player.Role.Team == Team.FoundationForces) ||
+                     (isAttackerNTF && isPlayerNTF))
             {
                 hut.IsAllowed = false;
             }
-            if (Server_NapCha_API.cs.Contains(hut.Player) && hut.Attacker.Role.Team == Team.ChaosInsurgency || Server_NapCha_API.cs.Contains(hut.Attacker) && hut.Player.Role.Team == Team.ChaosInsurgency || Server_NapCha_API.cs.Contains(hut.Attacker) && Server_NapCha_API.cs.Contains(hut.Player))
+            else if ((isPlayerCS && hut.Attacker.Role.Team == Team.ChaosInsurgency) ||
+                     (isAttackerCS && hut.Player.Role.Team == Team.ChaosInsurgency) ||
+                     (isAttackerCS && isPlayerCS))
             {
                 hut.IsAllowed = false;
             }
-            if(Server_NapCha_API.zl.Contains(hut.Player) && hut.Attacker != null || Server_NapCha_API.zl.Contains(hut.Attacker))
+            else if ((isPlayerZL && hut.Attacker != null) || isAttackerZL)
             {
                 hut.IsAllowed = false;
             }
-            if(Server_NapCha_API.无伤害.Contains(hut.Attacker))
+            else if (isAttackerNoDamage)
             {
                 hut.IsAllowed = true;
             }
         }
     }
+}
