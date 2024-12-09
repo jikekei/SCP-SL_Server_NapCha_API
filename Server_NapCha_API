@@ -34,6 +34,23 @@ namespace Server_NapCha_API
         }
 
         /// <summary>
+        /// 取消显示玩家的提示
+        /// 示例：取消提示(player);
+        /// </summary>
+        public void 取消提示(Player 玩家)
+        {
+            // 检查玩家是否为空并记录错误
+            if (玩家 == null)
+            {
+                Log.Error("取消提示失败：玩家对象为空。");
+                return;
+            }
+
+            // 获取玩家显示并清除提示
+            PlayerDisplay.Get(玩家)?.ClearHint();
+        }
+
+        /// <summary>
         /// 显示一个自定义提示
         /// 使用示例：
         /// var hint = 提示服务(player, 30, 200, "提示内容", HintAlignment.Center);
