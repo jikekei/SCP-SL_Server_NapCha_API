@@ -1,6 +1,6 @@
 # SCP-SL_Server_NapCha_API
 
-**SCPSL** 是一个基于 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow) 的简单提示服务 API，同时结合了 Exiled 的方法合集，  
+**SCPSL** 是一个基于 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow) 的ui调度器，同时结合了 Exiled 的方法合集，  
 它能方便地实现以下功能：
 
 - 动态提示 Hint（支持直接调用方法更新提示内容及取消时间）
